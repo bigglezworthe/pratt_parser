@@ -73,10 +73,10 @@ func createLexer(source string) *lexer {
             {regexp.MustCompile(`\s+`), skipHandler},
 
             //non-constants
-            //{regexp.MustCompile(`\/\/.*`), commentHandler},
+            {regexp.MustCompile(`\/\/.*`), commentHandler},
             {regexp.MustCompile(`"[^"]*"`), stringHandler},
             {regexp.MustCompile(`[0-9]+(\.[0-9]+)?`), numberHandler},
-            //{regexp.MustCompile(`[a-zA-Z_][a-zA-Z0-9_]*`), symbolHandler),
+            {regexp.MustCompile(`[a-zA-Z_][a-zA-Z0-9_]*`), symbolHandler},
 
             //default handlers (constants) 
             {regexp.MustCompile(`\[`), defaultHandler(OPEN_BRACKET, "[")},
@@ -136,13 +136,12 @@ func skipHandler(lex *lexer, regex *regexp.Regexp) {
 
 func stringHandler(lex *lexer, regex *regexp.Regexp) {
     match := regex.FindStringIndex(lex.remainder())
-    stringLiteral := lex.remainder()[match[0]:match[1]]
+    stringLiteral := lex.remainder()[match[0] + 1 : match[1] - 1] //omit quotes 
 
     lex.push(NewToken(STRING, stringLiteral))
-    lex.advanceN(len(stringLiteral))
+    lex.advanceN(len(stringLiteral) + 2)      //include omitted quotes 
 }
 
-//not sure why this one's different from string
 func numberHandler(lex *lexer, regex *regexp.Regexp) {
     match := regex.FindString(lex.remainder())
     lex.push(NewToken(NUMBER, match))
@@ -150,7 +149,16 @@ func numberHandler(lex *lexer, regex *regexp.Regexp) {
 }
 
 func symbolHandler(lex *lexer, regex *regexp.Regexp) {
-    
+    match := regex.FindString(lex.remainder())
+
+    //define vars in conditional
+    if kind, exists := reserved_lu[match]; exists {
+        lex.push(NewToken(kind, match))
+    } else {
+        lex.push(NewToken(IDENTIFIER, match))
+    }
+
+    lex.advanceN(len(match))
 }
 
 func commentHandler(lex *lexer, regex *regexp.Regexp) {

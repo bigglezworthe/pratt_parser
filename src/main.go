@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-    sourceBytes, _ := os.ReadFile("test.lang")
+    sourceBytes, _ := os.ReadFile("test2.lang")
 
     tokens, err := lexer.Tokenize(string(sourceBytes))
     if err != nil {
