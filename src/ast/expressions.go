@@ -8,17 +8,17 @@ import "github.com/bigglezworthe/pratt_parser/src/lexer"
 type NumberExpr struct {
     Value float64
 }
-func (n* NumberExpr) expr() {}
+func (n NumberExpr) expr() {}
 
 type StringExpr struct {
     Value string
 }
-func (n* StringExpr) expr() {}
+func (n StringExpr) expr() {}
 
 type SymbolExpr struct {
     Value string
 }
-func (n* SymbolExpr) expr() {}
+func (n SymbolExpr) expr() {}
 
 //==========================
 // Complex Expressions
@@ -28,6 +28,6 @@ type BinaryExpr struct {
     Operator lexer.Token
     Right Expr
 }
-func (n* BinaryExpr) expr() {}
+func (n BinaryExpr) expr() {}
 
 
