@@ -108,7 +108,7 @@ func createLexer(source string) *lexer {
             {regexp.MustCompile(`\*`), defaultHandler(STAR, "*")},
             {regexp.MustCompile(`/`), defaultHandler(SLASH, "/")},
             {regexp.MustCompile(`%`), defaultHandler(PERCENT, "%")},
-            {regexp.MustCompile(`^`), defaultHandler(CARROT, "^")},
+            {regexp.MustCompile(`\^`), defaultHandler(CARROT, "^")},
             
             //these have to come after all the compound matches
             {regexp.MustCompile(`=`), defaultHandler(ASSIGN, "=")},

@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-    sourceBytes, _ := os.ReadFile("./examples/02.lang")
+    sourceBytes, _ := os.ReadFile("./examples/03.lang")
 
     tokens, err := lexer.Tokenize(string(sourceBytes))
     if err != nil {
@@ -18,9 +18,9 @@ func main() {
         return
     }
 
-    //for _, token := range tokens {
-    //    token.Debug()
-    //}
+    for _, token := range tokens {
+        token.Debug()
+    }
 
     ast := parser.Parse(tokens)
     litter.Dump(ast)
